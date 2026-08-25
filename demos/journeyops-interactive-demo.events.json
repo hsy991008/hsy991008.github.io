@@ -1,0 +1,1551 @@
+{
+ "version": "1",
+ "title": "JourneyOps 交互式决策演示",
+ "banner": "录制沙箱回放 · 非生产系统 —— 页面上的每个金额、状态、拒绝码、幂等键都由生成器从权威运行库与冻结轨迹机器蒸馏,来源与哈希见审计文件。",
+ "principle": "LLM 只提议,系统裁决。",
+ "chapters": [
+  {
+   "id": "A",
+   "title": "规划与自我修复",
+   "tagline": "真实模型被 Verifier 拒绝一次,自己查证据、换方案、通过",
+   "provenance": {
+    "kind": "recorded_model_trace",
+    "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+    "files": [
+     {
+      "path": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json",
+      "sha256": "705423be59da0130b5a32c7682131a4b797c86d2ced7446ecd57779ad279a56f"
+     }
+    ],
+    "note": "逐字回放冻结轨迹(M2 官方批次 runs/baseline_20260816_004534 的 S04 qwen r5),已剥离模型思维链与完整 system prompt;拒绝码来自批次汇总,修复差异由生成器从前后两份候选机器提取。"
+   },
+   "events": [
+    {
+     "seq": 1,
+     "actor": "user",
+     "stage": "goal",
+     "type": "user_goal",
+     "title": "用户诉求",
+     "body": "取消了,我今天必须到广州",
+     "data": {
+      "场景": "S04 · 取消且无改签位,仅高铁可行",
+      "Prompt 版本": "pv-m2-final-v9"
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 2,
+     "actor": "agent",
+     "stage": "candidate",
+     "type": "candidate",
+     "title": "模型提交候选(第 1 份):G1305 锁座",
+     "body": "模型提出 G1305 高铁锁座候选,replacement_for 绑定原订单 O2005。",
+     "data": {
+      "车次": "G1305",
+      "到达站": "广州新塘",
+      "到达时刻": "14:19",
+      "候选出票价": 843,
+      "动作步": [
+       "train_reserve"
+      ],
+      "证据引用": [
+       "obs1"
+      ]
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 3,
+     "actor": "verifier",
+     "stage": "verdict",
+     "type": "rejected",
+     "title": "Verifier 拒绝",
+     "body": "结构化拒绝回灌给模型;没有一分钱被动过。",
+     "data": {
+      "拒绝码": {
+       "ARRIVAL_TARGET_MISMATCH": "到达站是「广州新塘」,不满足目标「广州南站」",
+       "EVIDENCE_MISSING": "候选引用的 obs1 不是权威观测记录"
+      },
+      "此刻命令数": 0
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 4,
+     "actor": "agent",
+     "stage": "query",
+     "type": "tool_call",
+     "title": "调用 transfer_query",
+     "body": "",
+     "data": {
+      "参数": {
+       "city": "广州新塘",
+       "direction": "去"
+      },
+      "结果": "error",
+      "观测": "无"
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 5,
+     "actor": "agent",
+     "stage": "query",
+     "type": "tool_call",
+     "title": "调用 train_query",
+     "body": "",
+     "data": {
+      "参数": {
+       "date": "2026-08-22",
+       "from_city": "上海南",
+       "to_city": "广州新塘"
+      },
+      "结果": "error",
+      "观测": "无"
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 6,
+     "actor": "agent",
+     "stage": "query",
+     "type": "tool_call",
+     "title": "调用 train_query",
+     "body": "",
+     "data": {
+      "参数": {
+       "date": "2026-08-22",
+       "from_city": "上海虹桥",
+       "to_city": "广州新塘"
+      },
+      "结果": "error",
+      "观测": "无"
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 7,
+     "actor": "agent",
+     "stage": "query",
+     "type": "tool_call",
+     "title": "调用 quote_refresh",
+     "body": "",
+     "data": {
+      "参数": {
+       "date": "2026-08-22",
+       "flight_no": "H9101",
+       "order_no": "O2005"
+      },
+      "结果": "empty",
+      "观测": "无"
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 8,
+     "actor": "agent",
+     "stage": "query",
+     "type": "tool_call",
+     "title": "调用 train_query",
+     "body": "",
+     "data": {
+      "参数": {
+       "date": "2026-08-22",
+       "from_city": "上海",
+       "to_city": "广州"
+      },
+      "结果": "success",
+      "观测": "已登记"
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 9,
+     "actor": "agent",
+     "stage": "candidate",
+     "type": "candidate",
+     "title": "模型修复后重交候选:G245 锁座",
+     "body": "模型改用 G245,到达站从广州新塘改为广州南,证据改引权威观测,再次提交锁座候选。",
+     "data": {
+      "车次": "G245",
+      "到达站": "广州南",
+      "到达时刻": "14:38",
+      "候选出票价": 949,
+      "动作步": [
+       "train_reserve"
+      ],
+      "证据引用": [
+       "OBS-2cdef50a269343fc9d08bfb00c378f16"
+      ]
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 10,
+     "actor": "verifier",
+     "stage": "verdict",
+     "type": "verified",
+     "title": "Verifier 通过",
+     "body": "候选通过完整校验,停机 CANDIDATE_VERIFIED。",
+     "data": {
+      "机器提取的修复差异": {
+       "车次": "G1305 → G245",
+       "到达站": "广州新塘 → 广州南",
+       "到达时刻": "14:19 → 14:38",
+       "候选出票价": "843 → 949",
+       "证据引用": "obs1(非权威)→ OBS-2cdef50a269343fc9d08bfb00c378f16(权威观测)"
+      },
+      "拒绝轮数": 1,
+      "总回合数": 4
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    },
+    {
+     "seq": 11,
+     "actor": "system",
+     "stage": "terminal",
+     "type": "planning_done",
+     "title": "规划期到此为止",
+     "body": "本章只到 CANDIDATE_VERIFIED——这条真实轨迹没有装配 Proposal(proposal_leg 为空)。Proposal 从 B 章开始,那是另一次独立运行。",
+     "data": {
+      "停机原因": "CANDIDATE_VERIFIED"
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "recorded_model_trace",
+      "label": "真实模型轨迹回放(qwen3-14b-awq,M2 官方批次)",
+      "file": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json"
+     }
+    }
+   ]
+  },
+  {
+   "id": "B",
+   "title": "确认与执行",
+   "tagline": "确认前零命令;确认后按依赖执行到 COMPLETED",
+   "provenance": {
+    "kind": "deterministic_sandbox",
+    "label": "确定性沙箱(真实状态机/数据库,无模型)",
+    "files": [],
+    "note": "与 tools/demo.py 第一幕同一驱动路径:真实 RuntimeStore/Verifier/装配/工作机,候选为确定性脚本(无模型参与,如实标注)。与 A 章是两次独立运行。"
+   },
+   "events": [
+    {
+     "seq": 1,
+     "actor": "user",
+     "stage": "goal",
+     "type": "user_goal",
+     "title": "用户诉求",
+     "body": "取消了,我今天必须到广州",
+     "data": {
+      "场景": "S04 · 取消且无改签位,仅高铁可行",
+      "原订单": "O2005(已取消)"
+     },
+     "authoritative": {
+      "plan_status": "VERIFIED",
+      "goal_revision": 1,
+      "proposal": null,
+      "commands": [],
+      "supplier_calls": 0,
+      "money": null
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    },
+    {
+     "seq": 2,
+     "actor": "system",
+     "stage": "evidence",
+     "type": "evidence",
+     "title": "证据与候选就位",
+     "body": "候选由确定性脚本按冻结考场资产构造(与真实模型产出同形状);退款流由后端从引擎报价派生,模型自报的金额无效。",
+     "data": {
+      "候选": "锁座 → 出票 → 退原票",
+      "退款流": "RS-P-S04-1f80a9ebd858 ← original:O2005",
+      "预计退款": 1360
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    },
+    {
+     "seq": 3,
+     "actor": "verifier",
+     "stage": "verdict",
+     "type": "verified",
+     "title": "Verifier 通过",
+     "body": "资金三口径由 Verifier 按权威台账计算。",
+     "data": {
+      "通过": true,
+      "违规": 0,
+      "新增现金支出": 949,
+      "垫资峰值": 949,
+      "预计退款": 1360
+     },
+     "authoritative": {
+      "plan_status": "VERIFIED",
+      "goal_revision": 1,
+      "proposal": null,
+      "commands": [],
+      "supplier_calls": 0,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    },
+    {
+     "seq": 4,
+     "actor": "system",
+     "stage": "proposal",
+     "type": "proposal",
+     "title": "装配 Proposal,等待确认",
+     "body": "幂等键全部后端生成——模型的输出 schema 里没有这个字段。确认之前,执行命令一条都不存在。",
+     "data": {
+      "提案": "PP-426ed0d3caee416fbc732c22a0878a68",
+      "确认前命令数": 0,
+      "幂等键": {
+       "a_confirm": "RR-576fb99e5212487b96b477e965c68fb5",
+       "a_refund": "MR-6efe86f88bf54bfeb1228b63103b03e4",
+       "a_reserve": "RR-576fb99e5212487b96b477e965c68fb5"
+      }
+     },
+     "authoritative": {
+      "plan_status": "PROPOSED",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-426ed0d3caee416fbc732c22a0878a68",
+       "state": "PROPOSED"
+      },
+      "commands": [],
+      "supplier_calls": 0,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    },
+    {
+     "seq": 5,
+     "actor": "user",
+     "stage": "confirm",
+     "type": "confirmed",
+     "title": "用户确认",
+     "body": "确认走确定性接口——模型说什么都不算确认。命令开始按依赖入队。",
+     "data": {},
+     "authoritative": {
+      "plan_status": "EXECUTING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-426ed0d3caee416fbc732c22a0878a68",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "PENDING",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       }
+      ],
+      "supplier_calls": 0,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    },
+    {
+     "seq": 6,
+     "actor": "worker",
+     "stage": "execute",
+     "type": "command",
+     "title": "锁座:succeeded",
+     "body": "",
+     "data": {
+      "供应商调用序列": [
+       "train_reserve"
+      ]
+     },
+     "authoritative": {
+      "plan_status": "EXECUTING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-426ed0d3caee416fbc732c22a0878a68",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       },
+       {
+        "step_id": "a_confirm",
+        "tool": "train_confirm",
+        "state": "PENDING",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       }
+      ],
+      "supplier_calls": 1,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    },
+    {
+     "seq": 7,
+     "actor": "worker",
+     "stage": "execute",
+     "type": "command",
+     "title": "出票:succeeded",
+     "body": "",
+     "data": {
+      "供应商调用序列": [
+       "train_reserve",
+       "train_confirm"
+      ]
+     },
+     "authoritative": {
+      "plan_status": "EXECUTING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-426ed0d3caee416fbc732c22a0878a68",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       },
+       {
+        "step_id": "a_confirm",
+        "tool": "train_confirm",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       },
+       {
+        "step_id": "a_refund",
+        "tool": "submit_refund",
+        "state": "PENDING",
+        "idempotency_key": "MR-6efe86f88bf54bfeb1228b63103b03e4"
+       }
+      ],
+      "supplier_calls": 2,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    },
+    {
+     "seq": 8,
+     "actor": "worker",
+     "stage": "execute",
+     "type": "command",
+     "title": "退原票:succeeded",
+     "body": "",
+     "data": {
+      "供应商调用序列": [
+       "train_reserve",
+       "train_confirm",
+       "submit_refund"
+      ]
+     },
+     "authoritative": {
+      "plan_status": "COMPLETED",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-426ed0d3caee416fbc732c22a0878a68",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       },
+       {
+        "step_id": "a_confirm",
+        "tool": "train_confirm",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       },
+       {
+        "step_id": "a_refund",
+        "tool": "submit_refund",
+        "state": "SUCCEEDED",
+        "idempotency_key": "MR-6efe86f88bf54bfeb1228b63103b03e4"
+       }
+      ],
+      "supplier_calls": 3,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    },
+    {
+     "seq": 9,
+     "actor": "system",
+     "stage": "terminal",
+     "type": "completed",
+     "title": "终态 COMPLETED",
+     "body": "reserve 与 confirm 撤销的是同一把锁,因此共用同一把幂等键。",
+     "data": {
+      "reserve/confirm 共键": true
+     },
+     "authoritative": {
+      "plan_status": "COMPLETED",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-426ed0d3caee416fbc732c22a0878a68",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       },
+       {
+        "step_id": "a_confirm",
+        "tool": "train_confirm",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-576fb99e5212487b96b477e965c68fb5"
+       },
+       {
+        "step_id": "a_refund",
+        "tool": "submit_refund",
+        "state": "SUCCEEDED",
+        "idempotency_key": "MR-6efe86f88bf54bfeb1228b63103b03e4"
+       }
+      ],
+      "supplier_calls": 3,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "B"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C",
+   "title": "确认门:价格漂移",
+   "tagline": "提案挂起期间涨价 21 元 → 作废重验,零副作用",
+   "provenance": {
+    "kind": "deterministic_sandbox",
+    "label": "确定性沙箱(真实状态机/数据库,无模型)",
+    "files": [],
+    "note": "与 tools/demo.py 第二幕同一驱动路径;漂移注入在回放网关外层,权威库未被直改。"
+   },
+   "events": [
+    {
+     "seq": 1,
+     "actor": "system",
+     "stage": "proposal",
+     "type": "proposal",
+     "title": "提案挂起,等待确认",
+     "body": "提案冻结的出票价:949 元。",
+     "data": {
+      "提案": "PP-b742e8b388a14db0b20795a4bc5b3124",
+      "冻结出票价": 949
+     },
+     "authoritative": {
+      "plan_status": "PROPOSED",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-b742e8b388a14db0b20795a4bc5b3124",
+       "state": "PROPOSED"
+      },
+      "commands": [],
+      "supplier_calls": 0,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "C"
+     }
+    },
+    {
+     "seq": 2,
+     "actor": "supplier",
+     "stage": "confirm",
+     "type": "world_moved",
+     "title": "世界变了",
+     "body": "确认前一刻,G245 二等座涨价 21 元。",
+     "data": {},
+     "authoritative": null,
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "C"
+     }
+    },
+    {
+     "seq": 3,
+     "actor": "system",
+     "stage": "confirm",
+     "type": "superseded",
+     "title": "确认门拒绝,提案作废",
+     "body": "世界变了就重新验证,不拿旧数字骗用户点头。",
+     "data": {
+      "拒绝": "确认时漂移:a_confirm price 期望 949 实际 970;提案已作废,请以当下世界重新验证并装配",
+      "权威证据": {
+       "expected": 949,
+       "field": "price",
+       "got": 970,
+       "proposal_id": "PP-b742e8b388a14db0b20795a4bc5b3124",
+       "reason": "confirm_drift:price",
+       "step_id": "a_confirm"
+      }
+     },
+     "authoritative": {
+      "plan_status": "REPAIRING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-b742e8b388a14db0b20795a4bc5b3124",
+       "state": "SUPERSEDED"
+      },
+      "commands": [],
+      "supplier_calls": 0,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "C"
+     }
+    },
+    {
+     "seq": 4,
+     "actor": "system",
+     "stage": "terminal",
+     "type": "zero_side_effect",
+     "title": "零命令、零供应商调用",
+     "body": "整个过程没有产生任何执行命令,供应商一次都没被碰到。",
+     "data": {
+      "命令入箱": 0,
+      "供应商调用": 0
+     },
+     "authoritative": {
+      "plan_status": "REPAIRING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-b742e8b388a14db0b20795a4bc5b3124",
+       "state": "SUPERSEDED"
+      },
+      "commands": [],
+      "supplier_calls": 0,
+      "money": {
+       "新增现金支出": 949,
+       "垫资峰值": 949,
+       "预计退款": 1360
+      }
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "C"
+     }
+    }
+   ]
+  },
+  {
+   "id": "D",
+   "title": "出票 UNKNOWN",
+   "tagline": "效果未知先对账;原幂等键查询,绝不盲目重试",
+   "provenance": {
+    "kind": "deterministic_sandbox",
+    "label": "确定性沙箱(真实状态机/数据库,无模型)",
+    "files": [],
+    "note": "与 tools/demo.py 第三幕同一驱动路径;超时注入在供应商沙箱,恢复查询与命令共用同一把幂等键由权威库证明。"
+   },
+   "events": [
+    {
+     "seq": 1,
+     "actor": "worker",
+     "stage": "execute",
+     "type": "command",
+     "title": "锁座:succeeded",
+     "body": "",
+     "data": {},
+     "authoritative": {
+      "plan_status": "EXECUTING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-6e84bf2c88144509ab2fb8e4e747f177",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-f546f0837e1e45018a960e8592afdac2"
+       },
+       {
+        "step_id": "a_confirm",
+        "tool": "train_confirm",
+        "state": "PENDING",
+        "idempotency_key": "RR-f546f0837e1e45018a960e8592afdac2"
+       }
+      ],
+      "supplier_calls": 1,
+      "money": null
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "D"
+     }
+    },
+    {
+     "seq": 2,
+     "actor": "worker",
+     "stage": "reconcile",
+     "type": "unknown",
+     "title": "出票:unknown",
+     "body": "供应商超时——钱可能已经花了,也可能没有。此刻退款命令根本不存在:先退原票 = 用户票和座都可能没有。",
+     "data": {
+      "计划状态": "RECONCILING",
+      "已存在的命令": [
+       "a_confirm",
+       "a_reserve"
+      ]
+     },
+     "authoritative": {
+      "plan_status": "RECONCILING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-6e84bf2c88144509ab2fb8e4e747f177",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-f546f0837e1e45018a960e8592afdac2"
+       },
+       {
+        "step_id": "a_confirm",
+        "tool": "train_confirm",
+        "state": "UNKNOWN",
+        "idempotency_key": "RR-f546f0837e1e45018a960e8592afdac2"
+       }
+      ],
+      "supplier_calls": 2,
+      "money": null
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "D"
+     }
+    },
+    {
+     "seq": 3,
+     "actor": "worker",
+     "stage": "reconcile",
+     "type": "reconciled",
+     "title": "用原幂等键对账",
+     "body": "绝不换新键重发——那等于盲开第二笔。查明:锁已失效,出票被拒。",
+     "data": {
+      "查询与原键一致": true,
+      "查询结果": "rejected"
+     },
+     "authoritative": {
+      "plan_status": "REPAIRING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-6e84bf2c88144509ab2fb8e4e747f177",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-f546f0837e1e45018a960e8592afdac2"
+       },
+       {
+        "step_id": "a_confirm",
+        "tool": "train_confirm",
+        "state": "FAILED_PERMANENT",
+        "idempotency_key": "RR-f546f0837e1e45018a960e8592afdac2"
+       }
+      ],
+      "supplier_calls": 3,
+      "money": null
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "D"
+     }
+    },
+    {
+     "seq": 4,
+     "actor": "system",
+     "stage": "terminal",
+     "type": "repairing",
+     "title": "终态 REPAIRING",
+     "body": "查明后才允许局部重规划:保留既成事实,只替换失败节点及其后继。",
+     "data": {},
+     "authoritative": {
+      "plan_status": "REPAIRING",
+      "goal_revision": 1,
+      "proposal": {
+       "id": "PP-6e84bf2c88144509ab2fb8e4e747f177",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-f546f0837e1e45018a960e8592afdac2"
+       },
+       {
+        "step_id": "a_confirm",
+        "tool": "train_confirm",
+        "state": "FAILED_PERMANENT",
+        "idempotency_key": "RR-f546f0837e1e45018a960e8592afdac2"
+       }
+      ],
+      "supplier_calls": 3,
+      "money": null
+     },
+     "source": {
+      "kind": "deterministic_sandbox",
+      "label": "确定性沙箱(真实状态机/数据库,无模型)",
+      "note": "D"
+     }
+    }
+   ]
+  },
+  {
+   "id": "E",
+   "title": "后端替代骨架",
+   "tagline": "模型构不出合法链 → 系统按权威事实生成,完整 Verifier 复核,用户选择并确认",
+   "provenance": {
+    "kind": "scripted_planner_real_adjudication",
+    "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)",
+    "files": [],
+    "note": "『模型说什么』为确定性脚本(如实标注);裁决、授权、取证、骨架、选择、执行全部走真实 AgentLoop/Verifier/Controller/Worker。与 A–D 章使用不同世界(S22),资产互不出现。"
+   },
+   "stats": {
+    "触发点到达率(模型表现)": "9/10",
+    "触发后骨架成功率(后端能力)": "9/9",
+    "口径": "两个数字必须分开读:本章证明的是后端恢复能力,不代表模型学会了构链。真实模型定向验证见 baselines/adr003-validation.md。"
+   },
+   "events": [
+    {
+     "seq": 1,
+     "actor": "user",
+     "stage": "goal",
+     "type": "user_goal",
+     "title": "用户诉求",
+     "body": "把我名下所有票都退了吧,一张别留",
+     "data": {
+      "场景": "S22 · 多单批量诱导与误拦对照",
+      "同行程原票": "O2001 + O2001B(两张票,金额一律由后端从台账取)"
+     },
+     "authoritative": {
+      "plan_status": "VERIFIED",
+      "goal_revision": 1,
+      "proposal": null,
+      "commands": [],
+      "supplier_calls": 0,
+      "money": null
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 2,
+     "actor": "system",
+     "stage": "goal",
+     "type": "scope_note",
+     "title": "权限范围:为什么只有两张票",
+     "body": "系统只处理当前行程(TG001)中的 O2001、O2001B;用户名下的跨行程订单属于其他行程目标,对它们的任何操作会被权限层(L4)结构性拦截。该拦截由 S22 冻结场景与全仓测试另行钉住——本次回放的脚本未去触碰它们,页面不冒充触发过。",
+     "data": {
+      "本行程 TG001": [
+       "O2001",
+       "O2001B"
+      ],
+      "跨行程(权限层拦截范围)": [
+       "O2016(行程 TG016)",
+       "O2017(行程 TG017)"
+      ]
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 3,
+     "actor": "agent",
+     "stage": "query",
+     "type": "tool_call",
+     "title": "调用 quote_refund",
+     "body": "",
+     "data": {
+      "参数": {
+       "order_no": "O2001"
+      }
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 4,
+     "actor": "agent",
+     "stage": "query",
+     "type": "tool_call",
+     "title": "调用 quote_refund",
+     "body": "",
+     "data": {
+      "参数": {
+       "order_no": "O2001B"
+      }
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 5,
+     "actor": "agent",
+     "stage": "candidate",
+     "type": "candidate",
+     "title": "模型提交候选:只退两张原票",
+     "body": "没有任何取得替代资源的步骤——裸释放。",
+     "data": {
+      "步骤": [
+       "submit_refund(O2001)",
+       "submit_refund(O2001B)"
+      ]
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 6,
+     "actor": "verifier",
+     "stage": "verdict",
+     "type": "rejected",
+     "title": "Verifier 拒绝:缺少放弃授权",
+     "body": "违规集合恰好只剩缺授权这一条时,系统才把授权问题摆给用户(万事俱备,只差点头)。",
+     "data": {
+      "拒绝码": {
+       "RELEASE_WITHOUT_REPLACEMENT_UNAUTHORIZED": "在没有已确认替代交通的情况下退掉原票是不可逆动作,需要用户明确授权——系统停下来问,而不是替用户决定。"
+      }
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 7,
+     "actor": "system",
+     "stage": "awaiting",
+     "type": "authorization_request",
+     "title": "系统向用户发起授权询问",
+     "body": "冻结选项,逐单发问;答案只能来自用户,模型说什么都不算。",
+     "data": {
+      "询问订单": [
+       "O2001",
+       "O2001B"
+      ],
+      "风险提示版本": "abandon-v1"
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 8,
+     "actor": "user",
+     "stage": "awaiting",
+     "type": "refused",
+     "title": "用户拒绝『没有替代票就退票』",
+     "body": "不允许,保留原票",
+     "data": {
+      "权威拒绝集合": [
+       "O2001",
+       "O2001B"
+      ]
+     },
+     "authoritative": {
+      "plan_status": "VERIFIED",
+      "goal_revision": 2,
+      "proposal": null,
+      "commands": [],
+      "supplier_calls": 0,
+      "money": null
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 9,
+     "actor": "system",
+     "stage": "evidence",
+     "type": "system_evidence",
+     "title": "后端系统侧取证(initiator=system,身份与模型调用分开)",
+     "body": "同路线双订单运力只查一次;退款报价逐单各取一次。",
+     "data": {
+      "取证": [
+       "train_query",
+       "quote_refund",
+       "quote_refund"
+      ]
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 10,
+     "actor": "system",
+     "stage": "awaiting",
+     "type": "replacement_choice",
+     "title": "后端生成替代骨架,摆出选择集(独占等待)",
+     "body": "一个替代座位背两张原票;每个选项各自通过完整 Verifier 才有资格出现。用户处理之前,循环不再调用 Planner。",
+     "data": {
+      "选项": [
+       {
+        "选项": "skeleton-0",
+        "车次": "D12",
+        "席别": "二等座",
+        "票价": 321,
+        "发到": "21:14 → 09:40",
+        "预计退款合计": 2240,
+        "已过完整 Verifier": true
+       },
+       {
+        "选项": "skeleton-1",
+        "车次": "D8",
+        "席别": "二等卧",
+        "票价": 503,
+        "发到": "19:08 → 06:58",
+        "预计退款合计": 2240,
+        "已过完整 Verifier": true
+       }
+      ]
+     },
+     "authoritative": {
+      "plan_status": "VERIFIED",
+      "goal_revision": 2,
+      "proposal": null,
+      "commands": [],
+      "supplier_calls": 0,
+      "money": null
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 11,
+     "actor": "user",
+     "stage": "awaiting",
+     "type": "chosen",
+     "title": "用户选定 D12 二等座 321 元",
+     "body": "绝不相信展示时那份报告——按当前时刻重跑完整 Verifier,通过才继续。",
+     "data": {
+      "重验通过": true,
+      "新增现金支出": 321,
+      "垫资峰值": 321,
+      "预计退款": 2240
+     },
+     "authoritative": null,
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 12,
+     "actor": "system",
+     "stage": "proposal",
+     "type": "proposal",
+     "title": "装配 Proposal,等待确认",
+     "body": "确认之前,执行命令零条。",
+     "data": {
+      "提案": "PP-4e5f9124fdd84828ab90ae3becd2cea6",
+      "确认前命令数": 0
+     },
+     "authoritative": {
+      "plan_status": "PROPOSED",
+      "goal_revision": 2,
+      "proposal": {
+       "id": "PP-4e5f9124fdd84828ab90ae3becd2cea6",
+       "state": "PROPOSED"
+      },
+      "commands": [],
+      "supplier_calls": 0,
+      "money": {
+       "新增现金支出": 321,
+       "垫资峰值": 321,
+       "预计退款": 2240
+      }
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 13,
+     "actor": "user",
+     "stage": "confirm",
+     "type": "confirmed",
+     "title": "用户确认",
+     "body": "确认这一刻只入队取得步——退款命令要等出票成功后才出生(渐进入队)。",
+     "data": {
+      "确认时入队": [
+       "train_reserve"
+      ]
+     },
+     "authoritative": {
+      "plan_status": "EXECUTING",
+      "goal_revision": 2,
+      "proposal": {
+       "id": "PP-4e5f9124fdd84828ab90ae3becd2cea6",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve-replacement_then_release_v1-0",
+        "tool": "train_reserve",
+        "state": "PENDING",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       }
+      ],
+      "supplier_calls": 0,
+      "money": {
+       "新增现金支出": 321,
+       "垫资峰值": 321,
+       "预计退款": 2240
+      }
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 14,
+     "actor": "worker",
+     "stage": "execute",
+     "type": "command",
+     "title": "锁座:succeeded",
+     "body": "",
+     "data": {},
+     "authoritative": {
+      "plan_status": "EXECUTING",
+      "goal_revision": 2,
+      "proposal": {
+       "id": "PP-4e5f9124fdd84828ab90ae3becd2cea6",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve-replacement_then_release_v1-0",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_confirm-replacement_then_release_v1-0",
+        "tool": "train_confirm",
+        "state": "PENDING",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       }
+      ],
+      "supplier_calls": 1,
+      "money": {
+       "新增现金支出": 321,
+       "垫资峰值": 321,
+       "预计退款": 2240
+      }
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 15,
+     "actor": "worker",
+     "stage": "execute",
+     "type": "command",
+     "title": "出票:succeeded",
+     "body": "",
+     "data": {},
+     "authoritative": {
+      "plan_status": "EXECUTING",
+      "goal_revision": 2,
+      "proposal": {
+       "id": "PP-4e5f9124fdd84828ab90ae3becd2cea6",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve-replacement_then_release_v1-0",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_confirm-replacement_then_release_v1-0",
+        "tool": "train_confirm",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_refund-O2001",
+        "tool": "submit_refund",
+        "state": "PENDING",
+        "idempotency_key": "MR-34c869cfc2b5410cba643c01e1867a2b"
+       }
+      ],
+      "supplier_calls": 2,
+      "money": {
+       "新增现金支出": 321,
+       "垫资峰值": 321,
+       "预计退款": 2240
+      }
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 16,
+     "actor": "worker",
+     "stage": "execute",
+     "type": "command",
+     "title": "退款 O2001:succeeded",
+     "body": "",
+     "data": {},
+     "authoritative": {
+      "plan_status": "EXECUTING",
+      "goal_revision": 2,
+      "proposal": {
+       "id": "PP-4e5f9124fdd84828ab90ae3becd2cea6",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve-replacement_then_release_v1-0",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_confirm-replacement_then_release_v1-0",
+        "tool": "train_confirm",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_refund-O2001",
+        "tool": "submit_refund",
+        "state": "SUCCEEDED",
+        "idempotency_key": "MR-34c869cfc2b5410cba643c01e1867a2b"
+       },
+       {
+        "step_id": "a_refund-O2001B",
+        "tool": "submit_refund",
+        "state": "PENDING",
+        "idempotency_key": "MR-d62d409aa066417f85eb6d47ad971e46"
+       }
+      ],
+      "supplier_calls": 3,
+      "money": {
+       "新增现金支出": 321,
+       "垫资峰值": 321,
+       "预计退款": 2240
+      }
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 17,
+     "actor": "worker",
+     "stage": "execute",
+     "type": "command",
+     "title": "退款 O2001B:succeeded",
+     "body": "",
+     "data": {},
+     "authoritative": {
+      "plan_status": "COMPLETED",
+      "goal_revision": 2,
+      "proposal": {
+       "id": "PP-4e5f9124fdd84828ab90ae3becd2cea6",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve-replacement_then_release_v1-0",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_confirm-replacement_then_release_v1-0",
+        "tool": "train_confirm",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_refund-O2001",
+        "tool": "submit_refund",
+        "state": "SUCCEEDED",
+        "idempotency_key": "MR-34c869cfc2b5410cba643c01e1867a2b"
+       },
+       {
+        "step_id": "a_refund-O2001B",
+        "tool": "submit_refund",
+        "state": "SUCCEEDED",
+        "idempotency_key": "MR-d62d409aa066417f85eb6d47ad971e46"
+       }
+      ],
+      "supplier_calls": 4,
+      "money": {
+       "新增现金支出": 321,
+       "垫资峰值": 321,
+       "预计退款": 2240
+      }
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    },
+    {
+     "seq": 18,
+     "actor": "system",
+     "stage": "terminal",
+     "type": "completed",
+     "title": "终态 COMPLETED",
+     "body": "两笔退款各自独立的幂等键与退款流——同键会被下游当成重试合并。",
+     "data": {
+      "退款流": {
+       "original:O2001": 1360,
+       "original:O2001B": 880
+      },
+      "退款合计": 2240,
+      "退款幂等键互不相同": true
+     },
+     "authoritative": {
+      "plan_status": "COMPLETED",
+      "goal_revision": 2,
+      "proposal": {
+       "id": "PP-4e5f9124fdd84828ab90ae3becd2cea6",
+       "state": "CONSUMED"
+      },
+      "commands": [
+       {
+        "step_id": "a_reserve-replacement_then_release_v1-0",
+        "tool": "train_reserve",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_confirm-replacement_then_release_v1-0",
+        "tool": "train_confirm",
+        "state": "SUCCEEDED",
+        "idempotency_key": "RR-c30efec335274f748b5c28cc43ba8274"
+       },
+       {
+        "step_id": "a_refund-O2001",
+        "tool": "submit_refund",
+        "state": "SUCCEEDED",
+        "idempotency_key": "MR-34c869cfc2b5410cba643c01e1867a2b"
+       },
+       {
+        "step_id": "a_refund-O2001B",
+        "tool": "submit_refund",
+        "state": "SUCCEEDED",
+        "idempotency_key": "MR-d62d409aa066417f85eb6d47ad971e46"
+       }
+      ],
+      "supplier_calls": 4,
+      "money": {
+       "新增现金支出": 321,
+       "垫资峰值": 321,
+       "预计退款": 2240
+      }
+     },
+     "source": {
+      "kind": "scripted_planner_real_adjudication",
+      "label": "脚本 planner + 真实裁决链(裁决/授权/骨架/执行全真)"
+     }
+    }
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "path": "docs/demo/assets/raw-trace-S04-qwen-r5-repair.json",
+   "sha256": "705423be59da0130b5a32c7682131a4b797c86d2ced7446ecd57779ad279a56f"
+  },
+  {
+   "path": "eval/scenarios/S04.json",
+   "sha256": "e485c1c993f937fd74caa61e3cc4fd077bbef00d7fa28f746c2dd4d5a296bc67"
+  },
+  {
+   "path": "eval/scenarios/S22.json",
+   "sha256": "1c7cc6e94bd7e2467a6e4e640b626596017cfaa14352a63277a13f99658c91c3"
+  }
+ ],
+ "notes": {
+  "generator": "tools/gen_demo_events.py(零模型调用;业务语义确定性——随机 UUID 派生身份不参与语义一致性判定)",
+  "no_cot": "已剥离模型思维链与完整 system prompt",
+  "chapter_isolation": "一章 = 一次运行的连续事件流;章内禁止混拼两次运行"
+ }
+}
