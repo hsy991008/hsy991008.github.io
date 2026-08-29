@@ -1,6 +1,6 @@
 {
  "version": "1",
- "title": "JourneyOps 交互式决策演示",
+ "title": "JourneyOps 交互式决策回放",
  "banner": "录制沙箱回放 · 非生产系统 —— 页面上的每个金额、状态、拒绝码、幂等键都由生成器从权威运行库与冻结轨迹机器蒸馏,来源与哈希见审计文件。",
  "principle": "LLM 只提议,系统裁决。",
  "chapters": [
