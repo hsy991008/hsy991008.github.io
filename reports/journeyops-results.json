@@ -1,0 +1,127 @@
+{
+  "as_of": "2026-09-05",
+  "disclosure": "作品集汇总摘录，不是原始评测资产；来源摘要用于追溯，不构成第三方认证。",
+  "blind": {
+    "name": "blind-v9",
+    "product_root": "5213913d",
+    "questions": 24,
+    "repeats": 2,
+    "runs": 96,
+    "batch_id": "1b35643781c0ac1c",
+    "prompt": "pv-m2-final-v9",
+    "model": "DeepSeek Flash / thinking off / max_tokens 2048",
+    "totals": {
+      "m3": {
+        "passed": 14,
+        "total": 48
+      },
+      "current": {
+        "passed": 37,
+        "total": 48
+      }
+    },
+    "buckets": {
+      "m3": {
+        "planning_main": {
+          "passed": 10,
+          "total": 36
+        },
+        "execution_special": {
+          "passed": 0,
+          "total": 6
+        },
+        "safety_closeout": {
+          "passed": 4,
+          "total": 6
+        }
+      },
+      "current": {
+        "planning_main": {
+          "passed": 26,
+          "total": 36
+        },
+        "execution_special": {
+          "passed": 6,
+          "total": 6
+        },
+        "safety_closeout": {
+          "passed": 5,
+          "total": 6
+        }
+      }
+    },
+    "pairs": {
+      "current_win": 23,
+      "m3_win": 0,
+      "tie": 25
+    },
+    "safety": {
+      "m3": {
+        "safety_escape": 0,
+        "commands_before_confirmation": 0
+      },
+      "current": {
+        "safety_escape": 0,
+        "commands_before_confirmation": 0
+      }
+    },
+    "cost_cny": {
+      "m3": 2.488297,
+      "current": 1.582275
+    },
+    "valid": true,
+    "replay_mismatches": 0
+  },
+  "controlled": {
+    "product_root": "aff82580",
+    "questions": 31,
+    "repeats": 8,
+    "runs": 496,
+    "scores": {
+      "m3": {
+        "planning_main": "135/184",
+        "execution_special": "15/32",
+        "safety_closeout": "18/32",
+        "safety_escape": 0,
+        "cny": 12.944497
+      },
+      "current": {
+        "planning_main": "174/184",
+        "execution_special": "13/32",
+        "safety_closeout": "22/32",
+        "safety_escape": 0,
+        "cny": 8.513295
+      }
+    }
+  },
+  "regression": {
+    "product_root": "9240e09b",
+    "result": "46/48",
+    "safety_escape": 1,
+    "kind": "PUBLIC_REGRESSION_AFTER_BACKEND_INVARIANTS"
+  },
+  "latest": {
+    "product_root": "c1a6468a",
+    "end_to_end_score": null,
+    "tests_at_closeout": 2488,
+    "evidence": "固定真实轨迹零模型验收、控制组、变异测试与全仓回归；无新端到端模型成绩。"
+  },
+  "sources": [
+    {
+      "file": "adr007-blind-v9-result.json",
+      "sha256": "4e5f0ddb560fddcbc70c0862f6487e71748e044c9c0e818b59489ba0e734ad1e"
+    },
+    {
+      "file": "adr007-dual-arm-496-result.json",
+      "sha256": "c25185f8c25e2ff324dfdae67473eb5e05d574cfdd29fda8c5ee034d470a36ef"
+    },
+    {
+      "file": "adr007-product-candidate-baseline.json",
+      "sha256": "caadee450baf7eb85e9230fa11ce889500f87b6c291c0e8be63e8e595ac5db43"
+    },
+    {
+      "file": "adr007-v9-public-regression-result.json",
+      "sha256": "36b827a1190758b6b35a80b81364a32989a94c2c6ff40b40c1b5276178bb7693"
+    }
+  ]
+}
